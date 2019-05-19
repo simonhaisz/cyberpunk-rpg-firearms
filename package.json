@@ -1,0 +1,12 @@
+{
+    "name": "shadowrun-firearms",
+    "description": "Shadowrun firearms stats",
+    "version": "0.1.0",
+    "scripts": {
+        "start": "node dist"
+    },
+    "devDependencies": {
+        "@types/node": "12.0.0",
+        "typescript": "3.4.5"
+    }
+}
