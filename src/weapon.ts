@@ -1,9 +1,9 @@
 export enum Caliber {
-    Pistol = "Pistol",
-    Magnum = "Magnum",
+    LightPistol = "LightPistol",
+    HeavyPistol = "HeavyPistol",
     Shotgun = "Shotgun",
-    Rifle = "Rifle",
-    Cannon = "Cannon"
+    LightRifle = "LightRifle",
+    HeavyRifle = "HeavyRifle"
 }
 
 export enum WeaponClass {
@@ -20,7 +20,9 @@ function getPower(caliber: Caliber): number {
     const s70 = 4;
 
     let velocity: number;
+    // const v350 = 1;
     const v500 = 2;
+    // const v700 = 3;
     const v1000 = 4;
 
     let density: number;
@@ -29,12 +31,12 @@ function getPower(caliber: Caliber): number {
     const d2 = 3;
 
     switch (caliber) {
-        case Caliber.Pistol:
+        case Caliber.LightPistol:
             size = s35;
             velocity = v500;
             density = d0_5;
             break;
-        case Caliber.Magnum:
+        case Caliber.HeavyPistol:
             size = s50;
             velocity = v500;
             density = d1;
@@ -44,12 +46,12 @@ function getPower(caliber: Caliber): number {
             velocity = v500;
             density = d1;
             break;
-        case Caliber.Rifle:
+        case Caliber.LightRifle:
             size = s25;
             velocity = v1000;
             density = d1;
             break;
-        case Caliber.Cannon:
+        case Caliber.HeavyRifle:
             size = s50;
             velocity = v1000;
             density = d2;
@@ -70,29 +72,29 @@ function getWeight(weaponClass: WeaponClass, caliber: Caliber) {
         case WeaponClass.Gun:
         case WeaponClass.AssaultGun:
             switch (caliber) {
-                case Caliber.Pistol:
+                case Caliber.LightPistol:
                     return w1;
-                case Caliber.Magnum:
+                case Caliber.HeavyPistol:
                     return w2;
                 case Caliber.Shotgun:
-                case Caliber.Rifle:
+                case Caliber.LightRifle:
                     return w4;
-                case Caliber.Cannon:
+                case Caliber.HeavyRifle:
                     return w8;
                 default:
                     throw new Error(`Unknown gun caliber '${caliber}'`);
             }
         case WeaponClass.MachineGun:
             switch (caliber) {
-                case Caliber.Pistol:
-                return w2;
-            case Caliber.Shotgun:
-            case Caliber.Rifle:
-                return w8;
-            case Caliber.Cannon:
-                return w16;
-            default:
-                throw new Error(`Unknown gun caliber '${caliber}'`);            }
+                case Caliber.LightPistol:
+                    return w2;
+                case Caliber.Shotgun:
+                case Caliber.LightRifle:
+                    return w8;
+                case Caliber.HeavyRifle:
+                    return w16;
+                default:
+                    throw new Error(`Unknown gun caliber '${caliber}'`);            }
         default:
             throw new Error(`Unknown weapon class '${weaponClass}'`);
     }
@@ -107,19 +109,19 @@ function getRecoil(caliber: Caliber, weaponClass: WeaponClass): number {
 function getAvailability(caliber: Caliber, weaponClass: WeaponClass, accuracy: number): number {
     let availability = -2;
     switch (caliber) {
-        case Caliber.Pistol:
+        case Caliber.LightPistol:
             availability += 0;
             break;
-        case Caliber.Magnum:
+        case Caliber.HeavyPistol:
             availability += 4;
             break;
         case Caliber.Shotgun:
             availability += 4;
             break;
-        case Caliber.Rifle:
+        case Caliber.LightRifle:
             availability += 4;
             break;
-        case Caliber.Cannon:
+        case Caliber.HeavyRifle:
             availability += 8;
             break;
         default:
@@ -141,39 +143,58 @@ function getAvailability(caliber: Caliber, weaponClass: WeaponClass, accuracy: n
 }
 
 const costs = [
-    100, 150, 200, 350, 500, 800, 1_000, 1_500, 2_000, 3_500, 5_000, 8_000, 10_000, 15_000, 20_000
+    100, 150, 200, 350, 500, 750, 1_000, 1_500, 2_000, 3_500, 5_000, 7500, 10_000, 15_000, 20_000, 35_000, 50_000
 ]
 function getCost(caliber: Caliber, weaponClass: WeaponClass, accuracy: number): number {
     let costIndex = 0;
     switch (caliber) {
-        case Caliber.Pistol:
+        case Caliber.LightPistol:
+            costIndex += 0;
+            break;
+        case Caliber.HeavyPistol:
             costIndex += 2;
             break;
-        case Caliber.Magnum:
-            costIndex += 4;
-            break;
         case Caliber.Shotgun:
+            costIndex += 3;
+            break;
+        case Caliber.LightRifle:
+            costIndex += 1;
+            break;
+        case Caliber.HeavyRifle:
             costIndex += 4;
             break;
-        case Caliber.Rifle:
-            costIndex += 4;
-            break;
-        case Caliber.Cannon:
-            costIndex += 6;
-            break;
+        default:
+            throw new Error(`Unknown caliber '${caliber}'`);
     }
     switch (weaponClass) {
         case WeaponClass.Gun:
             costIndex += 0;
             break;
         case WeaponClass.AssaultGun:
-            costIndex += 1;
+            costIndex += 2;
             break;
         case WeaponClass.MachineGun:
-            costIndex += 3;
+            costIndex += 4;
             break;
     }
-    costIndex += accuracy;
+    switch (accuracy) {
+        case 1:
+        case 2:
+            costIndex += accuracy;
+            break;
+        case 3:
+            costIndex += 4;
+            break;
+        case 4:
+            costIndex += 6;
+            break;
+        case 5:
+            costIndex += 8;
+            break;
+        case 6:
+            costIndex += 10;
+            break;
+    }
     if (costIndex >= costs.length) {
         throw new Error(`Cost index ${costIndex} is greater than the highest costs`);
     }
