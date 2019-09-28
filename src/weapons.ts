@@ -21,6 +21,8 @@ export const longGuns = [
     new Weapon("Colt M-23", Caliber.LightRifle, WeaponClass.AssaultGun, 4),
     new Weapon("FN HAR", Caliber.LightRifle, WeaponClass.AssaultGun, 4),
     new Weapon("Ares Alpha", Caliber.LightRifle, WeaponClass.AssaultGun, 5),
+    new Weapon("Krime Cannon", Caliber.HeavyRifle, WeaponClass.Gun, 4),
+    new Weapon("Panther XXL", Caliber.HeavyRifle, WeaponClass.Gun, 5),
     new Weapon("Ranger Arms SM-3", Caliber.LightRifle, WeaponClass.Gun, 6),
     new Weapon("Barrett Model 122", Caliber.HeavyRifle, WeaponClass.Gun, 6),
 ];
