@@ -3,10 +3,13 @@
     "description": "Shadowrun firearms stats",
     "version": "0.1.0",
     "scripts": {
+        "build": "tsc",
+        "clean": "rimmraf -rf dist",
         "start": "node dist"
     },
     "devDependencies": {
         "@types/node": "12.0.0",
+        "rimraf": "2.6.3",
         "typescript": "3.4.5"
     }
 }
